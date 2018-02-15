@@ -1,68 +1,48 @@
 <?php
 
-class Controller
+class Controller extends ControllerSharedFunction
 {
-    private $_page;
-    private $_action;
-    private $_view;
-    private $_datas;
     
-    public function __construct( $page, $action )
-    {
-        $this->_page = $page;
-        $this->_action = $action;
-        
-        $this->_setDatas();
-    }
-    
-    
-    private function _setDatas()
+    protected function _setDatas()
     {
         switch ( $this->_action )
         {
-
-            case 'sent' :
-                break;
-
-            default :
-                    $this->_datas[ 'view' ] = 'contact/contact';
+            default : 
+                    return $this->_checkMessageSent();
                 break;
         }
     }
     
-    private function _checkMessageSent( $action )
+    private function _checkMessageSent()
     {
         $datas = array();
+        $datas[ 'item' ] = array(
+            'email' => ( isset($_POST['email']) ? $_POST['email'] : ''),
+            'message' => ( isset($_POST['message']) ? $_POST['message'] : '')
+        );
 
-        if($action === 'send' )
+        if($this->_action === 'send' )
         {
-            $datas = $_POST;
+            //$datas = $_POST;
+            
+            $values = array(
+                'email' => [$_POST['email'], '*e'], 
+                'message' => [$_POST['message'], '*s']
+            );
+            $datas = new DataValidation();
+            $datas = $datas->validate($values);
 
-            if( empty( $_POST[ 'email' ] ) )
+            if ( isset($datas['error']) )
             {
-                $datas[ 'error' ][ 'emailempty' ] = true;
+                $datas['view'] = 'contact';
+                $datas[ 'displayMessage' ] = 'Une errur est survenue.<br>' . $datas['displayMessage'];
+                return $datas;
             }
-            else if( !filter_var( $_POST[ 'email' ], FILTER_VALIDATE_EMAIL ) )
-            {
-                $datas[ 'error' ][ 'emailformat' ] = true;
-            }
+            // send message by mail
+            // mail( 'mymail@domain.net', 'Subject', $datas[ 'message' ], 'From:'.$datas[ 'email' ] );
 
-            if( empty( $_POST[ 'message' ] ) )
-            {
-                $datas[ 'error' ][ 'messageempty' ] = true;
-            }
-
-            if( !isset( $datas[ 'error' ] ) )
-            {
-                // send message by mail
-                // mail( 'mymail@domain.net', 'Subject', $datas[ 'message' ], 'From:'.$datas[ 'email' ] );
-
-                $datas[ 'view' ] = 'contact_sent';
-            }
-            else
-            {
-                $datas[ 'view' ] = 'contact';
-            }
+            $datas[ 'view' ] = 'contact_sent';
+            $datas[ 'displayMessage' ] = 'Envoi effectué avec succès.<br>' . $datas['displayMessage'];
         }
         else
         {
@@ -71,11 +51,4 @@ class Controller
 
         return $datas;
     }
-    
-    
-    public function get_datas()
-    {
-        return $this->_datas;
-    }
-
 }

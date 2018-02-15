@@ -2,14 +2,13 @@
 
 <form action="<?php echo SITE_URL; ?>/index.php?page=contact&action=send" method="post">
     <label for="email">
-        <?php echo ( isset( $datas[ 'error' ][ 'emailempty' ] ) ) ? '<span class="alert">Aucune adresse n\'a été indiquée</span><br />' : ''; ?>
-        <?php echo ( isset( $datas[ 'error' ][ 'emailformat' ] ) ) ? '<span class="alert">Le format de l\'adresse n\'est pas conforme.</span><br />' : ''; ?>
-        <input type="text" name="email" id="email" value="<?php echo ( isset( $datas['email'] ) ) ? $datas['email'] : ''; ?>" placeholder="Adresse E-mail" />
+        <?php echo $pageController->formError( $datas, 'email', 'message' ); ?>
+        <input class="<?php echo $pageController->formError( $datas, 'email', 'class' ); ?>" type="text" name="email" id="email" value="<?php echo $datas['item']['email']; ?>" placeholder="Adresse E-mail" />
     </label>
     
     <label for="message">
-        <?php echo ( isset( $datas[ 'error' ][ 'messageempty' ] ) ) ? '<span class="alert">Aucune message n\'a été indiqué.</span><br />' : ''; ?>
-        <textarea id="message" name="message" placeholder="Votre message"><?php echo ( isset( $datas['message'] ) ) ? $datas['message'] : ''; ?></textarea>
+        <?php echo $pageController->formError( $datas, 'message', 'message' ); ?>
+        <textarea class="<?php echo $pageController->formError( $datas, 'message', 'class' ); ?>" id="message" name="message" placeholder="Votre message"><?php echo $datas['item']['message']; ?></textarea>
     </label>
     
     <button class="btn">Envoyer</button>

@@ -1,0 +1,36 @@
+.success{
+    color: green;
+}
+.error{
+    color: red;
+}
+.empty{
+    border-color: #ff6600;
+}
+.invalid{
+    border-color: #0066ff;
+}
+.hide{
+    display: none;
+}
+
+div.datas_message{
+    position: fixed;
+    top: 0;
+    left: 50%;
+    width: 500px;
+    margin: 0 0 0 -250px;
+    padding: 15px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+}
+div.datas_message.success{
+    border: 1px solid green;
+}
+div.datas_message.error{
+    border: 1px solid red;
+}

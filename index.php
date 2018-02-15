@@ -7,11 +7,14 @@ $page = ( isset($_GET['page']) ) ? $_GET['page'] : 'articles';
 $action = ( isset($_GET['action']) ) ? $_GET['action'] : '';
 
 
+include SITE_PATH . '/includes/function.php';
 include SITE_PATH . '/includes/Db.php';
+include SITE_PATH . '/includes/DataValidation.php';
+include SITE_PATH . '/includes/Query.php';
 
+include SITE_PATH . '/includes/ControllerSharedFunction.php';
 include SITE_PATH . '/application/' . $page . '/Controller.php';
-
-$Controller = new Controller($page, $action);
-$datas = $Controller->get_datas();
+$pageController = new Controller( $page, $action );
+$datas = $pageController->get_datas();
 
 include SITE_PATH . '/view/page.php';
