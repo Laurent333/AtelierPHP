@@ -12,9 +12,11 @@ include SITE_PATH . '/includes/Db.php';
 include SITE_PATH . '/includes/DataValidation.php';
 include SITE_PATH . '/includes/Query.php';
 
-include SITE_PATH . '/includes/ControllerSharedFunction.php';
+include SITE_PATH . '/includes/commons/ControllerCommon.php';
 include SITE_PATH . '/application/' . $page . '/Controller.php';
+
 $pageController = new Controller( $page, $action );
 $datas = $pageController->get_datas();
+$view = $pageController->get_view();
 
 include SITE_PATH . '/view/page.php';

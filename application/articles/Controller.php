@@ -1,6 +1,6 @@
 <?php
 
-class Controller extends ControllerSharedFunction
+class Controller extends ControllerCommon
 {
     
     protected function _setDatas()
@@ -8,27 +8,27 @@ class Controller extends ControllerSharedFunction
         switch ( $this->_action )
         {
             case 'detail' : 
-                    return $this->_article();
+                    $this->_article();
                 break;
             
             case 'form' : 
-                    return $this->_article();
+                    $this->_article();
                 break;
             
             case 'insert' : 
-                    return $this->_insert();
+                    $this->_insert();
                 break;
             
             case 'update' : 
-                    return $this->_update();
+                    $this->_update();
                 break;
             
             case 'delete' : 
-                    return $this->_delete();
+                    $this->_delete();
                 break;
 
             default : 
-                    return $this->_articles();
+                    $this->_articles();
                 break;
         }
     }
@@ -48,9 +48,9 @@ class Controller extends ControllerSharedFunction
             }
         }
 
-        $datas[ 'view' ] = 'articles';
+        $this->_view = 'articles';
 
-        return $datas;
+        $this->_datas = $datas;
     }
 
 
@@ -83,13 +83,16 @@ class Controller extends ControllerSharedFunction
             }
         }
         
-        if ( $this->_action == 'form' ){
-            $datas[ 'view' ] = 'article_form';
-        }else{
-            $datas[ 'view' ] = 'article_detail';
+        if ( $this->_action == 'form' )
+        {
+            $this->_view = 'article_form';
         }
-
-        return $datas;
+        else
+        {
+            $this->_view = 'article_detail';
+        }
+        
+        $this->_datas = $datas;
     }
 
     
@@ -107,17 +110,17 @@ class Controller extends ControllerSharedFunction
         
         if ( $datas['error'] )
         {
-            $datas['view'] = 'article_form';
+            $this->_view = 'article_form';
             $datas['displayMessage'] = 'Une erreur est survenue.<br>' . $datas['displayMessage'];
         }
         else
         {
             header( 'location:index.php?page=articles' );
-            $datas['view'] = 'articles';
+            $this->_view = 'articles';
             $datas['displayMessage'] = 'Enregistrement effectué avec succès.<br>' . $datas['displayMessage'];
         }
         
-        return $datas;
+        $this->_datas = $datas;
     }
     
     /**
@@ -147,21 +150,36 @@ class Controller extends ControllerSharedFunction
             if ( $datas['error'] )
             {
                 $datas['displayMessage'] = 'Une erreur est survenue.<br>' . $datas['displayMessage'];
+                $this->_datas = $datas;
             }
             else
             {
-                $datas['item'] = $this->_article( $_GET['id'] );
-                $datas['displayMessage'] = 'Enregistrement effectué avec succès.<br>' . $datas['displayMessage'];
+                $this->_article( $_GET['id'] );
+                $this->_datas['displayMessage'] = 'Enregistrement effectué avec succès.<br>' . $datas['displayMessage'];
             }
         }
         else
         {
-            $datas['error'] = 'no_form_send';
+            $this->_datas['error'] = 'no_form_send';
         }
         
-        $datas['view'] = 'article_form';
+        $this->_view = 'article_form';
+    }
+    
+    private function _delete()
+    {
+        $id = $_GET['id'];
         
-        return $datas;
+        if ( $id ){
+            $db = Db::connect();
+
+            $db->query( 'DELETE FROM articles WHERE IdArticle = \''.$db->real_escape_string($id).'\'' );
+
+        }
+        
+        $this->_articles();
+        $this->_datas['displayMessage'] = 'Suppression effectuée avec succès.';
+        $this->_view = 'articles';
     }
 
     

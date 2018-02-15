@@ -1,6 +1,6 @@
 <?php
 
-class Controller extends ControllerSharedFunction
+class Controller extends ControllerCommon
 {
     
     protected function _setDatas()
@@ -8,7 +8,7 @@ class Controller extends ControllerSharedFunction
         switch ( $this->_action )
         {
             default : 
-                    return $this->_checkMessageSent();
+                    $this->_checkMessageSent();
                 break;
         }
     }
@@ -34,21 +34,22 @@ class Controller extends ControllerSharedFunction
 
             if ( isset($datas['error']) )
             {
-                $datas['view'] = 'contact';
                 $datas[ 'displayMessage' ] = 'Une errur est survenue.<br>' . $datas['displayMessage'];
-                return $datas;
+                $this->_view = 'contact';
+                $this->_datas = $datas;
+                return;
             }
             // send message by mail
             // mail( 'mymail@domain.net', 'Subject', $datas[ 'message' ], 'From:'.$datas[ 'email' ] );
 
-            $datas[ 'view' ] = 'contact_sent';
             $datas[ 'displayMessage' ] = 'Envoi effectué avec succès.<br>' . $datas['displayMessage'];
+            $this->_view = 'contact_sent';
         }
         else
         {
-            $datas[ 'view' ] = 'contact';
+            $this->_view = 'contact';
         }
 
-        return $datas;
+        $this->_datas = $datas;
     }
 }

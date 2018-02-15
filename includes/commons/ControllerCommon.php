@@ -1,17 +1,18 @@
 <?php
 
-class ControllerSharedFunction
+class ControllerCommon
 {
     
     protected $_page;
     protected $_action;
     protected $_datas;
+    protected $_view;
 
     function __construct( $page, $action ) {
         $this->_page = $page;
         $this->_action = $action;
         
-        $this->_datas = $this->_setDatas();
+        $this->_setDatas();
     }
     
     /**
@@ -55,4 +56,10 @@ class ControllerSharedFunction
     {
         return $this->_datas;
     }
+    
+    public function get_view()
+    {
+        return $this->_view;
+    }
+    
 }

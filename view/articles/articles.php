@@ -9,7 +9,10 @@ if( isset( $datas[ 'item' ] ) )
     {
     ?>
         <article>
-            <h2><a href="<?php echo SITE_URL; ?>/index.php?page=articles&action=detail&id=<?php echo $row[ 'IdArticle' ]; ?>"><?php echo nl2br($row[ 'TitleArticle' ]); ?></a></h2>
+            <a href="<?php echo SITE_URL; ?>/index.php?page=articles&action=delete&id=<?php echo $row[ 'IdArticle' ]; ?>">Supprimer</a>
+            <h2>
+                <a href="<?php echo SITE_URL; ?>/index.php?page=articles&action=detail&id=<?php echo $row[ 'IdArticle' ]; ?>"><?php echo nl2br($row[ 'TitleArticle' ]); ?></a>
+            </h2>
             <p>
                 <?php echo nl2br($row[ 'IntroArticle' ]); ?>
             </p>
